@@ -1,0 +1,1457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#141020">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>STREET FIGHTER II': CHAMPION EDITION 80 — NGPC Pocket Tribute</title>
+  <link rel="manifest" href="./manifest.json">
+  <link rel="icon" href="./favicon.ico" sizes="any">
+  <link rel="icon" href="./icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="./apple-touch-icon.png">
+  <style>
+    :root {
+      --bg-void: #141020;
+      --bg-chassis: #1e2130;
+      --bg-panel: #282c3c;
+      --border-steel: #4e5872;
+      --border-ink: #0b0914;
+      --text-main: #f4f4f8;
+      --text-muted: #98a2bd;
+      --gold: #f8dc38;
+      --cyan: #38d8ec;
+      --crimson: #dc2838;
+      --emerald: #28b850;
+      --orange: #f48c28;
+      --purple: #7030a0;
+      --font-mono: ui-monospace, "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+      background-color: var(--bg-void);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      overscroll-behavior: none;
+    }
+
+    /* Hide touch controls cleanly unless touch-active */
+    .touch-deck-left,
+    .touch-deck-right {
+      display: none;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: none;
+    }
+
+    body.is-touch-active .touch-deck-left,
+    body.is-touch-active .touch-deck-right {
+      display: flex;
+    }
+
+    /* Orientation Rotate Guard for Mobile & Tablet Portrait */
+    #orientation-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 9000;
+      background: #141020;
+      color: var(--text-main);
+      padding: 24px env(safe-area-inset-right) 24px env(safe-area-inset-left);
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    @media (orientation: portrait) and (pointer: coarse),
+           (orientation: portrait) and (max-width: 1024px) {
+      body:not([data-orientation-dismissed="true"]) #orientation-overlay {
+        display: flex;
+      }
+    }
+
+    .rotate-card {
+      max-width: 360px;
+      width: 100%;
+      background: var(--bg-chassis);
+      border: 2px solid var(--gold);
+      padding: 24px 20px;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.7);
+    }
+
+    .rotate-icon {
+      width: 56px;
+      height: 56px;
+      margin: 0 auto 14px;
+      color: var(--gold);
+      display: block;
+    }
+
+    .rotate-title-zh {
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      color: var(--gold);
+      margin: 0 0 6px;
+    }
+
+    .rotate-title-en {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      color: var(--cyan);
+      margin: 0 0 12px;
+    }
+
+    .rotate-desc {
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--text-muted);
+      margin: 0 0 18px;
+    }
+
+    .rotate-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    /* Top Arcade Header */
+    .arcade-shell {
+      display: flex;
+      flex-direction: column;
+      min-height: 100dvh;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 8px 12px 24px;
+      gap: 10px;
+    }
+
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      background: var(--bg-chassis);
+      border: 2px solid var(--border-steel);
+      padding: 6px 10px;
+      flex-wrap: wrap;
+    }
+
+    .brand-cluster {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .brand-badge {
+      background: var(--crimson);
+      color: var(--gold);
+      border: 2px solid var(--gold);
+      font-family: var(--font-mono);
+      font-weight: 800;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      padding: 3px 8px;
+      white-space: nowrap;
+    }
+
+    .brand-sub {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: 0.06em;
+      white-space: nowrap;
+    }
+
+    .controls-cluster {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      appearance: none;
+      border: 2px solid var(--border-steel);
+      background: var(--bg-panel);
+      color: var(--text-main);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      padding: 5px 9px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      min-height: 30px;
+      transition: background-color 80ms ease, border-color 80ms ease;
+    }
+
+    .btn:hover {
+      border-color: var(--cyan);
+      background: #33394e;
+    }
+
+    .btn:active {
+      transform: translateY(1px);
+    }
+
+    .btn-primary {
+      background: var(--crimson);
+      border-color: var(--gold);
+      color: #ffffff;
+    }
+
+    .btn-primary:hover {
+      background: #b81f2e;
+      border-color: #fff394;
+    }
+
+    .btn[data-active="true"] {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    .status-pill {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 8px;
+      background: #141020;
+      border: 1px solid var(--border-steel);
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .status-pill.is-live {
+      border-color: var(--emerald);
+      color: var(--emerald);
+    }
+
+    /* Main Cockpit Row */
+    .cockpit-stage {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .crt-column {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
+    .crt-bezel {
+      position: relative;
+      box-sizing: content-box;
+      width: min(768px, calc(100% - 6px));
+      max-width: 768px;
+      aspect-ratio: 256 / 144;
+      background: #0b0914;
+      border: 3px solid var(--border-steel);
+      box-shadow: 0 0 0 2px #0b0914, 0 10px 28px rgba(0, 0, 0, 0.65);
+      overflow: hidden;
+    }
+
+    body.int-off .crt-bezel {
+      max-width: 100%;
+    }
+
+    .crt-bezel::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 4;
+      background:
+        repeating-linear-gradient(
+          to bottom,
+          rgba(0, 0, 0, 0) 0px,
+          rgba(0, 0, 0, 0) 2px,
+          rgba(0, 0, 0, 0.20) 3px
+        ),
+        radial-gradient(circle at center, transparent 64%, rgba(0, 0, 0, 0.30) 100%);
+    }
+
+    body.crt-off .crt-bezel::after {
+      display: none;
+    }
+
+    #canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+      outline: none;
+      background: #141020;
+      touch-action: none;
+      cursor: none;
+    }
+
+    #boot-loader {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #141020;
+      color: var(--gold);
+      font-family: var(--font-mono);
+      font-size: 13px;
+      letter-spacing: 0.1em;
+      z-index: 10;
+      gap: 8px;
+    }
+
+    body[data-booted="true"] #boot-loader {
+      display: none;
+    }
+
+    /* Input History Strip */
+    .telemetry-strip {
+      width: 100%;
+      max-width: 774px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      background: var(--bg-chassis);
+      border: 1px solid var(--border-steel);
+      padding: 4px 8px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+    }
+
+    .input-history {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      min-height: 20px;
+      overflow: hidden;
+    }
+
+    .hist-chip {
+      background: #141020;
+      border: 1px solid var(--border-steel);
+      color: var(--cyan);
+      padding: 1px 5px;
+      font-weight: 700;
+      font-size: 11px;
+      white-space: nowrap;
+    }
+
+    .hist-chip.is-btn {
+      color: var(--gold);
+      border-color: var(--orange);
+    }
+
+    .shortcut-hint {
+      color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Virtual Touch Decks */
+    .touch-deck-left,
+    .touch-deck-right {
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      flex: 0 0 auto;
+    }
+
+    .dpad-pad {
+      position: relative;
+      width: 152px;
+      height: 152px;
+      border-radius: 50%;
+      background: #1a1e2e;
+      border: 3px solid var(--border-steel);
+      box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.65);
+      touch-action: none;
+    }
+
+    .dpad-cross-h,
+    .dpad-cross-v {
+      position: absolute;
+      background: #2e344c;
+      border: 1px solid #4e5872;
+      pointer-events: none;
+    }
+
+    .dpad-cross-h {
+      left: 14px;
+      right: 14px;
+      top: 52px;
+      height: 44px;
+    }
+
+    .dpad-cross-v {
+      top: 14px;
+      bottom: 14px;
+      left: 52px;
+      width: 44px;
+    }
+
+    .dpad-indicator {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #556182, #282c3c);
+      border: 2px solid var(--cyan);
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      transition: border-color 60ms ease;
+    }
+
+    .dpad-dir-label {
+      position: absolute;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    .dpad-dir-label[data-dir="up"] { top: 8px; left: 50%; transform: translateX(-50%); }
+    .dpad-dir-label[data-dir="down"] { bottom: 8px; left: 50%; transform: translateX(-50%); }
+    .dpad-dir-label[data-dir="left"] { left: 10px; top: 50%; transform: translateY(-50%); }
+    .dpad-dir-label[data-dir="right"] { right: 10px; top: 50%; transform: translateY(-50%); }
+
+    .dpad-dir-label.is-on {
+      color: var(--gold);
+    }
+
+    .macro-row {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .macro-btn {
+      appearance: none;
+      background: #23283b;
+      border: 2px solid var(--border-steel);
+      color: var(--gold);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 800;
+      padding: 5px 8px;
+      min-width: 48px;
+      cursor: pointer;
+      touch-action: none;
+    }
+
+    .macro-btn.is-active {
+      background: var(--orange);
+      border-color: #ffffff;
+      color: #141020;
+    }
+
+    .fight-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 62px);
+      gap: 10px;
+    }
+
+    .arc-btn {
+      appearance: none;
+      width: 62px;
+      height: 62px;
+      border-radius: 50%;
+      border: 3px solid #f4f4f8;
+      font-family: var(--font-mono);
+      font-weight: 800;
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      line-height: 1.1;
+      cursor: pointer;
+      touch-action: none;
+      box-shadow: 0 4px 0 #0b0914;
+    }
+
+    .arc-btn span {
+      font-size: 14px;
+    }
+
+    .arc-btn small {
+      font-size: 9px;
+      opacity: 0.85;
+    }
+
+    .arc-lp { background: #2648b8; border-color: var(--cyan); }
+    .arc-hp { background: #b82030; border-color: #ff9a9a; }
+    .arc-lk { background: #228848; border-color: var(--gold); }
+    .arc-hk { background: #c45618; border-color: var(--orange); }
+
+    .arc-btn.is-pressed {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 #0b0914;
+      filter: brightness(1.25);
+    }
+
+    /* Reference Section Below the Fold */
+    .docs-section {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .panel-card {
+      background: var(--bg-chassis);
+      border: 2px solid var(--border-steel);
+      padding: 12px 14px;
+    }
+
+    .panel-card h2 {
+      margin: 0 0 10px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      color: var(--gold);
+      border-bottom: 1px solid var(--border-steel);
+      padding-bottom: 6px;
+    }
+
+    .controls-table {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+    }
+
+    .ctrl-box {
+      background: #171a26;
+      border: 1px solid var(--border-steel);
+      padding: 8px 10px;
+      line-height: 1.55;
+    }
+
+    .ctrl-box strong {
+      color: var(--cyan);
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .roster-filter-row {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .roster-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 8px;
+    }
+
+    .fighter-card {
+      background: #171a26;
+      border: 1px solid var(--border-steel);
+      padding: 8px 10px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      line-height: 1.45;
+    }
+
+    .fighter-card .fc-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--gold);
+      font-weight: 800;
+      margin-bottom: 4px;
+      gap: 6px;
+    }
+
+    .fighter-card .fc-tag {
+      font-size: 9px;
+      padding: 1px 5px;
+      background: #23283b;
+      border: 1px solid var(--border-steel);
+      color: var(--cyan);
+      margin-left: auto;
+    }
+
+    .fighter-card .fc-stage {
+      color: var(--text-muted);
+      font-size: 10px;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .fighter-card .fc-move {
+      color: var(--text-main);
+    }
+
+    .fighter-card .fc-cmd {
+      color: var(--cyan);
+    }
+
+    /* Compact Mobile/Tablet Landscape Cockpit */
+    @media (orientation: landscape) and (max-height: 540px) {
+      .arcade-shell {
+        padding: 4px 8px;
+        gap: 4px;
+        height: 100dvh;
+        min-height: 100dvh;
+        overflow: hidden;
+      }
+
+      .top-bar {
+        padding: 3px 8px;
+        gap: 6px;
+      }
+
+      .brand-sub,
+      .shortcut-hint,
+      #btn-moves-jump,
+      .docs-section {
+        display: none;
+      }
+
+      .cockpit-stage {
+        flex: 1 1 auto;
+        min-height: 0;
+        gap: 10px;
+        padding: 0 env(safe-area-inset-right) 0 env(safe-area-inset-left);
+      }
+
+      .crt-column {
+        flex: 1 1 0%;
+        min-width: 0;
+        height: 100%;
+        justify-content: center;
+        overflow: hidden;
+      }
+
+      .crt-bezel {
+        box-sizing: content-box;
+        width: min(512px, calc((100dvh - 96px) * 256 / 144));
+        max-width: 512px;
+        max-height: 288px;
+        height: auto;
+        aspect-ratio: 256 / 144;
+      }
+
+      .telemetry-strip {
+        padding: 2px 6px;
+        max-width: none;
+      }
+
+      .touch-deck-right .macro-row {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 4px;
+        width: 116px;
+      }
+
+      .dpad-pad {
+        width: 132px;
+        height: 132px;
+      }
+
+      .dpad-cross-h { left: 10px; right: 10px; top: 45px; height: 38px; }
+      .dpad-cross-v { top: 10px; bottom: 10px; left: 45px; width: 38px; }
+
+      .fight-grid {
+        grid-template-columns: repeat(2, 54px);
+        gap: 8px;
+      }
+
+      .arc-btn {
+        width: 54px;
+        height: 54px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Mobile/Tablet Portrait Rotate Prompt -->
+  <div id="orientation-overlay" role="dialog" aria-modal="true" aria-labelledby="rotate-heading">
+    <div class="rotate-card">
+      <svg class="rotate-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <rect x="4" y="6" width="10" height="16" rx="2"/>
+        <path d="M16 4c3 0 5 2 5 5v2"/>
+        <polyline points="18 9 21 12 24 9"/>
+      </svg>
+      <p id="rotate-heading" class="rotate-title-zh">請將手機或平板旋轉為橫向</p>
+      <p class="rotate-title-en">ROTATE TO LANDSCAPE</p>
+      <p class="rotate-desc">橫向握持可同時顯示左側 8 向街機十字鍵、中央 240×136 對戰畫面與右側四鍵出招區。</p>
+      <div class="rotate-actions">
+        <button id="btn-rotate-fullscreen" class="btn btn-primary" type="button">進入橫向全螢幕 / LANDSCAPE FULLSCREEN</button>
+        <button id="btn-rotate-dismiss" class="btn" type="button">繼續直向操作 / CONTINUE IN PORTRAIT</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="arcade-shell">
+    <header class="top-bar">
+      <div class="brand-cluster">
+        <span class="brand-badge">SF2' CE // 80</span>
+        <span class="brand-sub">CHAMPION &amp; TURBO EDITION · NGPC POCKET CHIBI</span>
+      </div>
+      <div class="controls-cluster">
+        <span id="pad-status" class="status-pill">PAD: OFF</span>
+        <button id="btn-touch-mode" class="btn" type="button" title="Toggle On-Screen Touch Pad">TOUCH: AUTO</button>
+        <button id="btn-crt" class="btn" type="button" data-active="true" title="Toggle CRT Scanline Shader">CRT: ON</button>
+        <button id="btn-int" class="btn" type="button" data-active="true" title="Toggle Integer Scaling (240×136 × N)">INT: ON</button>
+        <button id="btn-moves-jump" class="btn" type="button" title="Jump to Command List">MOVES</button>
+        <button id="btn-pause" class="btn" type="button" title="Start / Pause Match (Enter)">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><rect x="2" y="2" width="3" height="8"/><rect x="7" y="2" width="3" height="8"/></svg>
+          PAUSE
+        </button>
+        <button id="btn-mute" class="btn" type="button" title="Toggle Chiptune Audio (M)">AUDIO: ON</button>
+        <button id="btn-fullscreen" class="btn" type="button" title="Toggle Fullscreen">FULL</button>
+        <button id="btn-reset" class="btn" type="button" title="Reboot Cartridge">RESET</button>
+      </div>
+    </header>
+
+    <main class="cockpit-stage">
+      <!-- Left Virtual Touch Deck: 8-way Slide D-Pad + Start/Box pills -->
+      <section class="touch-deck-left" aria-label="Left Virtual Arcade Stick">
+        <div id="dpad-zone" class="dpad-pad" role="group" aria-label="8-way Direction Pad">
+          <div class="dpad-cross-h"></div>
+          <div class="dpad-cross-v"></div>
+          <span class="dpad-dir-label" data-dir="up">U</span>
+          <span class="dpad-dir-label" data-dir="down">D</span>
+          <span class="dpad-dir-label" data-dir="left">L</span>
+          <span class="dpad-dir-label" data-dir="right">R</span>
+          <div id="dpad-knob" class="dpad-indicator"></div>
+        </div>
+        <div class="macro-row">
+          <button id="btn-touch-start" class="macro-btn" type="button">START</button>
+          <button id="btn-touch-box" class="macro-btn" type="button">HITBOX</button>
+        </div>
+      </section>
+
+      <!-- Center CRT Monitor + Telemetry -->
+      <section class="crt-column">
+        <div class="crt-bezel">
+          <div id="boot-loader">
+            <span>INSERT COIN // LOADING SF2_CE_80.TIC</span>
+          </div>
+          <canvas id="canvas" tabindex="0" aria-label="Street Fighter II Champion Edition 80 Display"></canvas>
+        </div>
+        <div class="telemetry-strip">
+          <div id="input-history" class="input-history" aria-live="off">
+            <span class="hist-chip">READY</span>
+          </div>
+          <span class="shortcut-hint">P1: ARROWS + Z/X/A/S · ENTER: PAUSE · TAB: HITBOX · M: MUTE</span>
+        </div>
+      </section>
+
+      <!-- Right Virtual Touch Deck: Macros + 4-Button Fight Pad -->
+      <section class="touch-deck-right" aria-label="Right Virtual Attack Buttons">
+        <div class="macro-row">
+          <button id="macro-flip" class="macro-btn" type="button" title="Toggle Macro Facing (→ / ←)">DIR:→</button>
+          <button id="macro-sp1" class="macro-btn" type="button" title="236+LP Hadou/Shot Macro">236+P</button>
+          <button id="macro-sp2" class="macro-btn" type="button" title="623+HP Shoryu/Upper Macro">623+P</button>
+          <button id="macro-throw" class="macro-btn" type="button" title="Close Throw">THROW</button>
+        </div>
+        <div class="fight-grid">
+          <button class="arc-btn arc-lp" data-code="KeyZ" data-key="z" data-label="LP" type="button"><span>LP</span><small>Z</small></button>
+          <button class="arc-btn arc-hp" data-code="KeyA" data-key="a" data-label="HP" type="button"><span>HP</span><small>A</small></button>
+          <button class="arc-btn arc-lk" data-code="KeyX" data-key="x" data-label="LK" type="button"><span>LK</span><small>X</small></button>
+          <button class="arc-btn arc-hk" data-code="KeyS" data-key="s" data-label="HK" type="button"><span>HK</span><small>S</small></button>
+        </div>
+      </section>
+    </main>
+
+    <!-- Below-the-fold Command List & Controls Reference -->
+    <section id="move-list-section" class="docs-section">
+      <div class="panel-card">
+        <h2>CONTROLS &amp; INPUT BRIDGES</h2>
+        <div class="controls-table">
+          <div class="ctrl-box">
+            <strong>1P KEYBOARD</strong>
+            Move / Guard: <code>Arrow Keys</code><br>
+            LP / LK: <code>Z</code> / <code>X</code><br>
+            HP / HK: <code>A</code> / <code>S</code> (alt <code>U</code> / <code>J</code>)
+          </div>
+          <div class="ctrl-box">
+            <strong>2P VERSUS KEYBOARD</strong>
+            Move / Guard: <code>I K J L</code><br>
+            LP / LK: <code>Y</code> / <code>N</code> (or <code>,</code> / <code>.</code>)<br>
+            HP / HK: <code>U</code> / <code>H</code> (or <code>O</code> / <code>/</code>)
+          </div>
+          <div class="ctrl-box">
+            <strong>SYSTEM &amp; TRAINING</strong>
+            Start / Pause: <code>Enter</code> or <code>Space</code><br>
+            Training Hitboxes: <code>Tab</code><br>
+            Dummy Guard Cycle: <code>R</code> · Audio: <code>M</code>
+          </div>
+          <div class="ctrl-box">
+            <strong>GAMEPAD &amp; TOUCH</strong>
+            Standard Controller: D-Pad/Stick + Face Buttons (auto P1/P2)<br>
+            Touch Pad: 8-Way Slide D-Pad + Negative-Edge Attack Buttons
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-card">
+        <h2>12 WORLD WARRIORS — SPECIAL &amp; COMMAND MOVE LIST</h2>
+        <div id="roster-filters" class="roster-filter-row" role="group" aria-label="Filter Fighters by Style">
+          <button class="btn" type="button" data-style="ALL" data-active="true">ALL (12)</button>
+          <button class="btn" type="button" data-style="SHOTO">MOTION</button>
+          <button class="btn" type="button" data-style="CHARGE">CHARGE</button>
+          <button class="btn" type="button" data-style="GRAPPLER">GRAPPLER / TECH</button>
+          <button class="btn" type="button" data-style="BOSS">4 KINGS</button>
+        </div>
+        <div id="roster-grid" class="roster-grid"></div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    (function () {
+      const canvas = document.getElementById('canvas');
+      const padStatus = document.getElementById('pad-status');
+      const btnTouchMode = document.getElementById('btn-touch-mode');
+      const btnPause = document.getElementById('btn-pause');
+      const btnMute = document.getElementById('btn-mute');
+      const btnCrt = document.getElementById('btn-crt');
+      const btnInt = document.getElementById('btn-int');
+      const btnFullscreen = document.getElementById('btn-fullscreen');
+      const btnReset = document.getElementById('btn-reset');
+      const btnMovesJump = document.getElementById('btn-moves-jump');
+      const btnRotateFs = document.getElementById('btn-rotate-fullscreen');
+      const btnRotateDismiss = document.getElementById('btn-rotate-dismiss');
+      const dpadZone = document.getElementById('dpad-zone');
+      const dpadKnob = document.getElementById('dpad-knob');
+      const historyEl = document.getElementById('input-history');
+
+      const KEY_META = {
+        ArrowUp:    { key: 'ArrowUp',    keyCode: 38 },
+        ArrowDown:  { key: 'ArrowDown',  keyCode: 40 },
+        ArrowLeft:  { key: 'ArrowLeft',  keyCode: 37 },
+        ArrowRight: { key: 'ArrowRight', keyCode: 39 },
+        KeyZ:       { key: 'z',          keyCode: 90 },
+        KeyX:       { key: 'x',          keyCode: 88 },
+        KeyA:       { key: 'a',          keyCode: 65 },
+        KeyS:       { key: 's',          keyCode: 83 },
+        KeyI:       { key: 'i',          keyCode: 73 },
+        KeyK:       { key: 'k',          keyCode: 75 },
+        KeyJ:       { key: 'j',          keyCode: 74 },
+        KeyL:       { key: 'l',          keyCode: 76 },
+        KeyY:       { key: 'y',          keyCode: 89 },
+        KeyN:       { key: 'n',          keyCode: 78 },
+        KeyU:       { key: 'u',          keyCode: 85 },
+        KeyH:       { key: 'h',          keyCode: 72 },
+        Enter:      { key: 'Enter',      keyCode: 13 },
+        Tab:        { key: 'Tab',        keyCode: 9  },
+        KeyM:       { key: 'm',          keyCode: 77 },
+      };
+
+      const heldBySource = { touch: new Set(), pad: new Set(), macro: new Set() };
+      const globalHeld = new Set();
+      const historyQueue = [];
+
+      function pushHistory(label, isBtn) {
+        if (!label) return;
+        historyQueue.unshift({ label, isBtn });
+        if (historyQueue.length > 8) historyQueue.pop();
+        historyEl.innerHTML = historyQueue
+          .map((item) => `<span class="hist-chip${item.isBtn ? ' is-btn' : ''}">${item.label}</span>`)
+          .join('');
+      }
+
+      function emitKey(code, isDown) {
+        const meta = KEY_META[code];
+        if (!meta) return;
+        const ev = new KeyboardEvent(isDown ? 'keydown' : 'keyup', {
+          key: meta.key,
+          code,
+          keyCode: meta.keyCode,
+          which: meta.keyCode,
+          bubbles: true,
+          cancelable: true,
+        });
+        document.dispatchEvent(ev);
+      }
+
+      function syncSourceKeys(source, nextSet) {
+        const prev = heldBySource[source];
+        const unionBefore = new Set([...heldBySource.touch, ...heldBySource.pad, ...heldBySource.macro]);
+        heldBySource[source] = new Set(nextSet);
+        const unionAfter = new Set([...heldBySource.touch, ...heldBySource.pad, ...heldBySource.macro]);
+
+        for (const code of unionAfter) {
+          if (!unionBefore.has(code)) {
+            globalHeld.add(code);
+            emitKey(code, true);
+          }
+        }
+        for (const code of unionBefore) {
+          if (!unionAfter.has(code)) {
+            globalHeld.delete(code);
+            emitKey(code, false);
+          }
+        }
+        return prev;
+      }
+
+      function tapKey(code, holdMs = 70, label = '') {
+        if (label) pushHistory(label, true);
+        const s = new Set(heldBySource.macro);
+        s.add(code);
+        syncSourceKeys('macro', s);
+        setTimeout(() => {
+          const next = new Set(heldBySource.macro);
+          next.delete(code);
+          syncSourceKeys('macro', next);
+        }, holdMs);
+      }
+
+      // 1. Touch Mode (AUTO / ON / OFF) + coarse/touch auto-detection
+      let touchMode = localStorage.getItem('sf2_touch_mode') || 'AUTO';
+      let sawTouchInput = window.matchMedia('(pointer: coarse)').matches || (navigator.maxTouchPoints > 0);
+
+      function applyTouchVisibility() {
+        const active = touchMode === 'ON' || (touchMode === 'AUTO' && sawTouchInput);
+        document.body.classList.toggle('is-touch-active', active);
+        btnTouchMode.textContent = `TOUCH: ${touchMode}`;
+        btnTouchMode.dataset.active = active ? 'true' : 'false';
+      }
+
+      btnTouchMode.addEventListener('click', () => {
+        touchMode = touchMode === 'AUTO' ? 'ON' : (touchMode === 'ON' ? 'OFF' : 'AUTO');
+        localStorage.setItem('sf2_touch_mode', touchMode);
+        applyTouchVisibility();
+      });
+
+      window.addEventListener('touchstart', () => {
+        if (!sawTouchInput) {
+          sawTouchInput = true;
+          applyTouchVisibility();
+        }
+      }, { passive: true, capture: true });
+
+      applyTouchVisibility();
+
+      // 2. Orientation Prompt Dismiss
+      if (sessionStorage.getItem('sf2_portrait_ok') === '1') {
+        document.body.dataset.orientationDismissed = 'true';
+      }
+
+      btnRotateFs.addEventListener('click', async () => {
+        try {
+          if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
+            await document.documentElement.requestFullscreen();
+          }
+          if (screen.orientation && screen.orientation.lock) {
+            await screen.orientation.lock('landscape');
+          }
+        } catch (_) {
+          // Safe fallback on browsers restricting orientation.lock
+        }
+      });
+
+      btnRotateDismiss.addEventListener('click', () => {
+        sessionStorage.setItem('sf2_portrait_ok', '1');
+        document.body.dataset.orientationDismissed = 'true';
+      });
+
+      // 3. 8-Way Slide-to-Motion Virtual D-Pad
+      let dpadPointerId = null;
+      const activeTouchDirs = new Set();
+      const activeTouchBtns = new Map();
+
+      function syncTouchCombined() {
+        const combined = new Set(activeTouchDirs);
+        for (const code of activeTouchBtns.values()) combined.add(code);
+        syncSourceKeys('touch', combined);
+      }
+
+      const DIR_ARROWS = {
+        U: '↑', D: '↓', L: '←', R: '→',
+        UL: '↖', UR: '↗', DL: '↙', DR: '↘',
+      };
+      let lastDirBadge = '';
+
+      function updateDpadVector(clientX, clientY) {
+        const rect = dpadZone.getBoundingClientRect();
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height / 2;
+        const dx = clientX - cx;
+        const dy = clientY - cy;
+        const dist = Math.hypot(dx, dy);
+        const maxR = rect.width * 0.34;
+        const deadR = rect.width * 0.14;
+
+        const clampDist = Math.min(dist, maxR);
+        const angle = Math.atan2(dy, dx);
+        const kx = dist > 0 ? Math.cos(angle) * clampDist : 0;
+        const ky = dist > 0 ? Math.sin(angle) * clampDist : 0;
+        dpadKnob.style.transform = `translate(calc(-50% + ${kx.toFixed(1)}px), calc(-50% + ${ky.toFixed(1)}px))`;
+
+        activeTouchDirs.clear();
+        let u = false, d = false, l = false, r = false;
+        if (dist >= deadR) {
+          const deg = (angle * 180) / Math.PI; // -180..180 (0 = right, 90 = down)
+          if (deg > -112.5 && deg < -67.5) u = true;
+          else if (deg >= -67.5 && deg <= -22.5) { u = true; r = true; }
+          else if (deg > -22.5 && deg < 22.5) r = true;
+          else if (deg >= 22.5 && deg <= 67.5) { d = true; r = true; }
+          else if (deg > 67.5 && deg < 112.5) d = true;
+          else if (deg >= 112.5 && deg <= 157.5) { d = true; l = true; }
+          else if (deg > 157.5 || deg < -157.5) l = true;
+          else if (deg >= -157.5 && deg <= -112.5) { u = true; l = true; }
+        }
+
+        if (u) activeTouchDirs.add('ArrowUp');
+        if (d) activeTouchDirs.add('ArrowDown');
+        if (l) activeTouchDirs.add('ArrowLeft');
+        if (r) activeTouchDirs.add('ArrowRight');
+
+        dpadZone.querySelector('[data-dir="up"]').classList.toggle('is-on', u);
+        dpadZone.querySelector('[data-dir="down"]').classList.toggle('is-on', d);
+        dpadZone.querySelector('[data-dir="left"]').classList.toggle('is-on', l);
+        dpadZone.querySelector('[data-dir="right"]').classList.toggle('is-on', r);
+
+        const codeStr = `${u ? 'U' : d ? 'D' : ''}${l ? 'L' : r ? 'R' : ''}`;
+        if (codeStr && codeStr !== lastDirBadge) {
+          pushHistory(DIR_ARROWS[codeStr] || codeStr, false);
+        }
+        lastDirBadge = codeStr;
+        syncTouchCombined();
+      }
+
+      function resetDpad() {
+        dpadPointerId = null;
+        lastDirBadge = '';
+        activeTouchDirs.clear();
+        dpadKnob.style.transform = 'translate(-50%, -50%)';
+        dpadZone.querySelectorAll('.dpad-dir-label').forEach((el) => el.classList.remove('is-on'));
+        syncTouchCombined();
+      }
+
+      dpadZone.addEventListener('pointerdown', (e) => {
+        if (e.pointerType === 'touch' && !sawTouchInput) {
+          sawTouchInput = true;
+          applyTouchVisibility();
+        }
+        e.preventDefault();
+        dpadPointerId = e.pointerId;
+        if (dpadZone.setPointerCapture) {
+          try { dpadZone.setPointerCapture(e.pointerId); } catch (_) {}
+        }
+        updateDpadVector(e.clientX, e.clientY);
+      });
+
+      dpadZone.addEventListener('pointermove', (e) => {
+        if (dpadPointerId === e.pointerId) {
+          e.preventDefault();
+          updateDpadVector(e.clientX, e.clientY);
+        }
+      });
+
+      dpadZone.addEventListener('pointerup', (e) => {
+        if (dpadPointerId === e.pointerId) {
+          e.preventDefault();
+          resetDpad();
+        }
+      });
+
+      dpadZone.addEventListener('pointercancel', (e) => {
+        if (dpadPointerId === e.pointerId) resetDpad();
+      });
+
+      // 4. Touch Attack Buttons (LP/LK/HP/HK) with Multi-Touch Ownership
+      document.querySelectorAll('.arc-btn').forEach((btn) => {
+        const code = btn.dataset.code;
+        const label = btn.dataset.label;
+        btn.addEventListener('pointerdown', (e) => {
+          e.preventDefault();
+          activeTouchBtns.set(e.pointerId, code);
+          btn.classList.add('is-pressed');
+          pushHistory(label, true);
+          if (btn.setPointerCapture) {
+            try { btn.setPointerCapture(e.pointerId); } catch (_) {}
+          }
+          syncTouchCombined();
+        });
+        const releaseBtn = (e) => {
+          if (activeTouchBtns.has(e.pointerId)) {
+            activeTouchBtns.delete(e.pointerId);
+            btn.classList.remove('is-pressed');
+            syncTouchCombined();
+          }
+        };
+        btn.addEventListener('pointerup', releaseBtn);
+        btn.addEventListener('pointercancel', releaseBtn);
+      });
+
+      // 5. Special Macros (236+P, 623+P, THROW) with Direction Toggle
+      let macroFacingRight = true;
+      const btnMacroFlip = document.getElementById('macro-flip');
+      btnMacroFlip.addEventListener('pointerdown', (e) => {
+        e.preventDefault();
+        macroFacingRight = !macroFacingRight;
+        btnMacroFlip.textContent = macroFacingRight ? 'DIR:→' : 'DIR:←';
+        btnMacroFlip.classList.toggle('is-active', !macroFacingRight);
+      });
+
+      function runMotionSequence(steps, btnEl) {
+        btnEl.classList.add('is-active');
+        let delay = 0;
+        steps.forEach(([codes, dur, label]) => {
+          setTimeout(() => {
+            if (label) pushHistory(label, codes.some((c) => c.startsWith('Key')));
+            syncSourceKeys('macro', new Set(codes));
+          }, delay);
+          delay += dur;
+        });
+        setTimeout(() => {
+          syncSourceKeys('macro', new Set());
+          btnEl.classList.remove('is-active');
+        }, delay);
+      }
+
+      document.getElementById('macro-sp1').addEventListener('pointerdown', (e) => {
+        e.preventDefault();
+        const fwd = macroFacingRight ? 'ArrowRight' : 'ArrowLeft';
+        const diag = macroFacingRight ? '↘' : '↙';
+        const fwdSym = macroFacingRight ? '→+LP' : '←+LP';
+        runMotionSequence([
+          [['ArrowDown'], 45, '↓'],
+          [['ArrowDown', fwd], 45, diag],
+          [[fwd, 'KeyZ'], 75, fwdSym],
+        ], e.currentTarget);
+      });
+
+      document.getElementById('macro-sp2').addEventListener('pointerdown', (e) => {
+        e.preventDefault();
+        const fwd = macroFacingRight ? 'ArrowRight' : 'ArrowLeft';
+        const diag = macroFacingRight ? '↘+HP' : '↙+HP';
+        const fwdSym = macroFacingRight ? '→' : '←';
+        runMotionSequence([
+          [[fwd], 40, fwdSym],
+          [['ArrowDown'], 40, '↓'],
+          [['ArrowDown', fwd, 'KeyA'], 75, diag],
+        ], e.currentTarget);
+      });
+
+      document.getElementById('macro-throw').addEventListener('pointerdown', (e) => {
+        e.preventDefault();
+        const fwd = macroFacingRight ? 'ArrowRight' : 'ArrowLeft';
+        const fwdSym = macroFacingRight ? '→+LP' : '←+LP';
+        runMotionSequence([
+          [[fwd, 'KeyZ'], 80, fwdSym],
+        ], e.currentTarget);
+      });
+
+      document.getElementById('btn-touch-start').addEventListener('pointerdown', (e) => {
+        e.preventDefault();
+        tapKey('Enter', 80, 'START');
+      });
+
+      document.getElementById('btn-touch-box').addEventListener('pointerdown', (e) => {
+        e.preventDefault();
+        tapKey('Tab', 80, 'HITBOX');
+      });
+
+      // 6. Top Bar Controls + Safe Audio Muting
+      let audioMuted = false;
+      function setModuleAudioMuted(muted) {
+        audioMuted = muted;
+        btnMute.textContent = muted ? 'AUDIO: OFF' : 'AUDIO: ON';
+        btnMute.dataset.active = muted ? 'false' : 'true';
+        const mod = window.Module;
+        if (mod && mod._saudio_context && mod._saudio_node && mod._saudio_node.gain) {
+          mod._saudio_node.gain.value = muted ? 0 : 1;
+        }
+      }
+
+      btnPause.addEventListener('click', () => tapKey('Enter', 80, 'PAUSE'));
+      btnMute.addEventListener('click', () => {
+        setModuleAudioMuted(!audioMuted);
+        tapKey('KeyM', 70, 'MUTE');
+      });
+      btnFullscreen.addEventListener('click', () => {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen?.().catch(() => {});
+        } else {
+          document.exitFullscreen?.().catch(() => {});
+        }
+      });
+      btnReset.addEventListener('click', () => window.location.reload());
+      btnMovesJump.addEventListener('click', () => {
+        document.getElementById('move-list-section').scrollIntoView({ behavior: 'smooth' });
+      });
+
+      const TIC80_OPT_DIR = '/com.nesbox.tic/TIC-80/.local/b3dbd59';
+      const TIC80_OPT_PATH = `${TIC80_OPT_DIR}/options.json`;
+      let crtEnabled = localStorage.getItem('sf2_crt') !== '0';
+      let intEnabled = localStorage.getItem('sf2_int') !== '0';
+
+      function readTic80FsOptions() {
+        if (typeof FS === 'undefined' || !FS.readFile) return null;
+        try {
+          return JSON.parse(FS.readFile(TIC80_OPT_PATH, { encoding: 'utf8' }));
+        } catch (_) {
+          return null;
+        }
+      }
+
+      function syncTic80Options(crtOn, intOn, persistToIdb = true) {
+        if (typeof FS !== 'undefined' && FS.mkdirTree && FS.writeFile) {
+          try {
+            FS.mkdirTree(TIC80_OPT_DIR);
+            const prev = readTic80FsOptions() || {};
+            const volume = typeof prev.volume === 'number' ? prev.volume : 15;
+            const mapping = typeof prev.mapping === 'string' ? prev.mapping : '';
+            const payload = JSON.stringify({
+              crt: Boolean(crtOn),
+              fullscreen: false,
+              vsync: true,
+              integerScale: Boolean(intOn),
+              volume,
+              mapping,
+            });
+            FS.writeFile(TIC80_OPT_PATH, payload);
+            if (persistToIdb && FS.syncfs && window.Module && !window.Module.syncing) {
+              window.Module.syncing = true;
+              FS.syncfs(false, () => { window.Module.syncing = false; });
+            }
+          } catch (_) {}
+        }
+        if (typeof HEAP32 !== 'undefined' && typeof HEAPU8 !== 'undefined') {
+          const studioPtr = HEAP32[126000 >> 2] || 0;
+          const configPtr = studioPtr ? (HEAP32[(studioPtr + 732) >> 2] || 0) : 0;
+          if (studioPtr > 0) {
+            HEAPU8[studioPtr + 712] = crtOn ? 1 : 0;
+            HEAPU8[studioPtr + 715] = intOn ? 1 : 0;
+          }
+          if (configPtr > 0) {
+            HEAPU8[configPtr + 32] = crtOn ? 1 : 0;
+            HEAPU8[configPtr + 35] = intOn ? 1 : 0;
+          }
+        }
+      }
+
+      function applyCrtState() {
+        document.body.classList.toggle('crt-off', !crtEnabled);
+        btnCrt.textContent = crtEnabled ? 'CRT: ON' : 'CRT: OFF';
+        btnCrt.dataset.active = crtEnabled ? 'true' : 'false';
+        syncTic80Options(crtEnabled, intEnabled);
+      }
+
+      function applyIntState() {
+        document.body.classList.toggle('int-off', !intEnabled);
+        btnInt.textContent = intEnabled ? 'INT: ON' : 'INT: OFF';
+        btnInt.dataset.active = intEnabled ? 'true' : 'false';
+        syncTic80Options(crtEnabled, intEnabled);
+      }
+
+      btnCrt.addEventListener('click', () => {
+        crtEnabled = !crtEnabled;
+        localStorage.setItem('sf2_crt', crtEnabled ? '1' : '0');
+        applyCrtState();
+      });
+      btnInt.addEventListener('click', () => {
+        intEnabled = !intEnabled;
+        localStorage.setItem('sf2_int', intEnabled ? '1' : '0');
+        applyIntState();
+      });
+      applyCrtState();
+      applyIntState();
+
+      // Log physical keydowns to input history when focused on canvas
+      window.addEventListener('keydown', (e) => {
+        if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space', 'Tab'].includes(e.code)) {
+          if (document.activeElement === canvas || document.activeElement === document.body) {
+            e.preventDefault();
+          }
+        }
+        if (e.repeat) return;
+        const map = {
+          ArrowUp: ['↑', false], ArrowDown: ['↓', false], ArrowLeft: ['←', false], ArrowRight: ['→', false],
+          KeyZ: ['LP', true], KeyX: ['LK', true], KeyA: ['HP', true], KeyS: ['HK', true],
+          Enter: ['START', true], Space: ['PAUSE', true],
+        };
+        if (map[e.code]) pushHistory(map[e.code][0], map[e.code][1]);
+      }, { passive: false });
+
+      // 7. HTML5 Gamepad Polling Bridge (P1 + P2)
+      let connectedPadCount = 0;
+      function pollGamepads() {
+        const pads = navigator.getGamepads ? Array.from(navigator.getGamepads()).filter(Boolean) : [];
+        if (pads.length !== connectedPadCount) {
+          connectedPadCount = pads.length;
+          padStatus.textContent = connectedPadCount === 0 ? 'PAD: OFF' : (connectedPadCount === 1 ? 'PAD: 1P' : 'PAD: 1P+2P');
+          padStatus.classList.toggle('is-live', connectedPadCount > 0);
+        }
+
+        const nextPadKeys = new Set();
+        const mappings = [
+          { up: 'ArrowUp', down: 'ArrowDown', left: 'ArrowLeft', right: 'ArrowRight', lp: 'KeyZ', lk: 'KeyX', hp: 'KeyA', hk: 'KeyS', start: 'Enter' },
+          { up: 'KeyI', down: 'KeyK', left: 'KeyJ', right: 'KeyL', lp: 'KeyY', lk: 'KeyN', hp: 'KeyU', hk: 'KeyH', start: 'Enter' },
+        ];
+
+        pads.slice(0, 2).forEach((pad, idx) => {
+          const m = mappings[idx];
+          const b = pad.buttons || [];
+          const axX = (pad.axes && pad.axes[0]) || 0;
+          const axY = (pad.axes && pad.axes[1]) || 0;
+          if (axY < -0.38 || b[12]?.pressed) nextPadKeys.add(m.up);
+          if (axY > 0.38 || b[13]?.pressed) nextPadKeys.add(m.down);
+          if (axX < -0.38 || b[14]?.pressed) nextPadKeys.add(m.left);
+          if (axX > 0.38 || b[15]?.pressed) nextPadKeys.add(m.right);
+          if (b[2]?.pressed) nextPadKeys.add(m.lp);
+          if (b[0]?.pressed) nextPadKeys.add(m.lk);
+          if (b[3]?.pressed || b[5]?.pressed) nextPadKeys.add(m.hp);
+          if (b[1]?.pressed || b[7]?.pressed) nextPadKeys.add(m.hk);
+          if (b[9]?.pressed) nextPadKeys.add(m.start);
+        });
+
+        syncSourceKeys('pad', nextPadKeys);
+        requestAnimationFrame(pollGamepads);
+      }
+      requestAnimationFrame(pollGamepads);
+
+      // 8. Populate 12-Character Command Reference with Style Filter
+      const ROSTER_DOC = [
+        ['RYU', '🇯🇵', 'JAPAN · SUZAKU CASTLE', 'SHOTO', 'Hadouken 236+P (LP Slow / HP Fast) · Shoryuken 623+P · Tatsumaki 214+K · Collarbone →+LP (Overhead)'],
+        ['KEN', '🇺🇸', 'USA · HARBOR DOCK', 'SHOTO', 'Hadouken 236+P · Flame DP 623+P · Tatsumaki 214+K · Step Overhead →+LP'],
+        ['CHUN-LI', '🇨🇳', 'CHINA · TAIPING MARKET', 'CHARGE', 'Kikoken [4]6+P · Lightning Legs Mash K · Spin Bird [2]8+K · Air Head Stomp ↓+LK'],
+        ['GUILE', '🇺🇸', 'USA · AIR FORCE BASE', 'CHARGE', 'Sonic Boom [4]6+P · Flash Kick [2]8+K · Spin Backfist 214+P (Overhead) · Knee →+LK'],
+        ['BLANKA', '🇧🇷', 'BRAZIL · AMAZON RIVER', 'CHARGE', 'Rolling [4]6+P · Electric Thunder Mash P · Vertical Roll [2]8+K'],
+        ['E.HONDA', '🇯🇵', 'JAPAN · SENTOU BATHHOUSE', 'CHARGE', '100 Hand Slap Mash P · Sumo Headbutt [4]6+P · Sumo Smash [2]8+K · Lunge →+LP'],
+        ['ZANGIEF', '🇷🇺', 'USSR · STEEL FOUNDRY', 'GRAPPLER', 'Screw Piledriver 360+P · Double Lariat LP+HP/236+P · Siberian Slam 214+K · Headbutt →+LP'],
+        ['DHALSIM', '🇮🇳', 'INDIA · ELEPHANT TEMPLE', 'GRAPPLER', 'Yoga Fire 236+P · Yoga Flame 214+P · Yoga Teleport 623+K · Elastic Normals'],
+        ['BALROG', '🇺🇸', 'USA · LAS VEGAS STRIP', 'BOSS', 'Dash Straight [4]6+P · Dash Upper [4]6+K · Turn/Buffalo [2]8+P/K'],
+        ['VEGA', '🇪🇸', 'SPAIN · FLAMENCO TAVERN', 'BOSS', 'Crystal Flash [4]6+P · Sky High Claw [2]8+K · Scarlet Terror 214+K'],
+        ['SAGAT', '🇹🇭', 'THAI · BUDDHA RUINS', 'BOSS', 'High/Low Tiger Shot 236+P/K · Tiger Uppercut 623+P · Tiger Knee 214+K'],
+        ['M.BISON', '🇹🇭', 'THAI · SHADALOO TEMPLE', 'BOSS', 'Psycho Crusher [4]6+P · Scissor Kick [4]6+K · Head Stomp [2]8+K'],
+      ];
+      let rosterFilter = 'ALL';
+      function renderRosterCards() {
+        const list = ROSTER_DOC.filter((r) => rosterFilter === 'ALL' || r[3] === rosterFilter);
+        document.getElementById('roster-grid').innerHTML = list.map(
+          ([name, flag, stage, style, moves]) => `
+          <div class="fighter-card">
+            <div class="fc-head"><span>${flag} ${name}</span><span class="fc-tag">${style}</span></div>
+            <span class="fc-stage">${stage}</span>
+            <div class="fc-move"><span class="fc-cmd">${moves}</span></div>
+          </div>`
+        ).join('');
+      }
+      document.querySelectorAll('#roster-filters [data-style]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          rosterFilter = btn.dataset.style;
+          document.querySelectorAll('#roster-filters [data-style]').forEach((b) => {
+            b.dataset.active = b.dataset.style === rosterFilter ? 'true' : 'false';
+          });
+          renderRosterCards();
+        });
+      });
+      renderRosterCards();
+
+      // 9. Test & Introspection API
+      window.__sf2Shell = {
+        getTouchMode: () => touchMode,
+        setTouchMode: (m) => { touchMode = m; applyTouchVisibility(); },
+        isTouchVisible: () => document.body.classList.contains('is-touch-active'),
+        isCrtEnabled: () => !document.body.classList.contains('crt-off'),
+        isIntEnabled: () => !document.body.classList.contains('int-off'),
+        getTic80Options: () => {
+          const studioPtr = typeof HEAP32 !== 'undefined' ? (HEAP32[126000 >> 2] || 0) : 0;
+          const configPtr = studioPtr ? (HEAP32[(studioPtr + 732) >> 2] || 0) : 0;
+          const wasmCrt = configPtr && typeof HEAPU8 !== 'undefined' ? HEAPU8[configPtr + 32] : -1;
+          const wasmInt = configPtr && typeof HEAPU8 !== 'undefined' ? HEAPU8[configPtr + 35] : -1;
+          return {
+            fsJson: readTic80FsOptions(),
+            wasmCrt,
+            wasmInt,
+            studioPtr,
+            configPtr,
+          };
+        },
+        getGamepadCount: () => connectedPadCount,
+        getActiveKeys: () => Array.from(globalHeld),
+        isOrientationBlocked: () => {
+          const el = document.getElementById('orientation-overlay');
+          return window.getComputedStyle(el).display !== 'none';
+        },
+        isBooted: () => document.body.dataset.booted === 'true',
+      };
+
+      // 10. Official TIC-80 WASM Boot
+      window.Module = {
+        canvas,
+        arguments: ['sf2_ce_80.tic'],
+        locateFile: (path) => `./${path}`,
+        preRun: [
+          function () {
+            if (window.FS && window.FS.createPreloadedFile) {
+              window.FS.createPreloadedFile('/', 'sf2_ce_80.tic', './sf2_ce_80.tic', true, false, () => {
+                document.body.dataset.booted = 'true';
+              });
+            }
+          },
+        ],
+        onRuntimeInitialized: () => {
+          canvas.focus();
+          setTimeout(() => { document.body.dataset.booted = 'true'; }, 250);
+        },
+      };
+
+      let rawSokolStart = null;
+      function wrappedSokolStart() {
+        syncTic80Options(crtEnabled, intEnabled, false);
+        const res = rawSokolStart ? rawSokolStart() : undefined;
+        setTimeout(() => {
+          syncTic80Options(crtEnabled, intEnabled, true);
+        }, 400);
+        return res;
+      }
+      Object.defineProperty(window.Module, '_sokol_start', {
+        configurable: true,
+        enumerable: true,
+        get: () => (rawSokolStart ? wrappedSokolStart : undefined),
+        set: (fn) => { rawSokolStart = fn; },
+      });
+
+      if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+        navigator.serviceWorker.register('./sw.js').catch(() => {});
+      }
+    })();
+  </script>
+  <script async src="./tic80.js"></script>
+</body>
+</html>
