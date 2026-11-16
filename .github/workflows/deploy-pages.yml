@@ -1,0 +1,101 @@
+name: CI & Deploy to GitHub Pages
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "ci-${{ github.ref }}"
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Build PWA Bundle & E2E Cartridge Verification
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "22"
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+
+      - name: Install LuaJIT for Headless Cartridge Simulation
+        run: sudo apt-get update && sudo apt-get install -y luajit
+
+      - name: Build TIC-80 Cartridges, PWA dist/, & Web Zip Bundle
+        run: npm run build
+
+      - name: Install Test Dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Run Cartridge E2E, Smoke Test, and Playwright WASM Player Suite
+        run: npm test
+
+      - name: Upload Player Test Evidence
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: sf2-ce-80-player-evidence
+          path: test-artifacts/
+          if-no-files-found: ignore
+
+      - name: Upload Cartridge & Web Bundle Artifacts
+        uses: actions/upload-artifact@v6
+        with:
+          name: sf2-ce-80-dist
+          path: |
+            sf2_ce_80.tic
+            sf2_ce_80.lua
+            dist/sf2-ce-80-web.zip
+
+  deploy:
+    name: Deploy Web Console to GitHub Pages
+    needs: test
+    if: (github.event_name == 'push' && github.ref == 'refs/heads/main') || github.event_name == 'workflow_dispatch'
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "22"
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+
+      - name: Build dist/
+        run: npm run build
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: "dist"
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

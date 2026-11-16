@@ -3,6 +3,8 @@
 **Neo Geo Pocket Color (*Match of the Millennium* SD/Chibi) Style Tribute to *Street Fighter II': Champion Edition* on the TIC-80 Fantasy Console (`240×136`)**
 
 > **Built with Gemini 4 Argon Orchestrator** — End-to-end game design, TIC-80 Lua engine, NGPC chibi pixel art synthesis, 8-track chiptune tracker transcription, WebAssembly arcade shell, and automated E2E verification orchestrated by **Gemini 4 Argon Orchestrator**.
+>
+> **Live Web Arcade (GitHub Pages)**: https://vdustr.github.io/poc-game-sf2-ce-80-gemini-4-argon-orchestrator/
 
 ---
 
@@ -70,3 +72,9 @@ npm run serve
 ## AI Orchestration
 
 This entire project — including gameplay systems research, TIC-80 Lua engine architecture, hardware `8×8` NGPC chibi sprites/stages, 8-track chiptune soundtrack transcription, adaptive WebAssembly/PWA player shell, and automated test suites — was built with **Gemini 4 Argon Orchestrator**.
+
+---
+
+## License
+
+Released under the [MIT](LICENSE) License.

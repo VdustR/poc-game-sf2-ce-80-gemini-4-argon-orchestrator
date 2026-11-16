@@ -90,18 +90,18 @@ async function main() {
 
     // Navigate Title -> Select -> VS -> Fight via real keyboard events
     await page.click('#canvas');
-    await page.keyboard.press('KeyZ'); // Title -> Select
+    await page.keyboard.press('KeyZ', { delay: 75 }); // Title -> Select
     await page.waitForTimeout(350);
     await page.screenshot({ path: resolve(artifactsDir, '07-desktop-select.png') });
-    await page.keyboard.press('KeyZ'); // Select -> VS (Ryu vs Ken)
+    await page.keyboard.press('KeyZ', { delay: 75 }); // Select -> VS (Ryu vs Ken)
     await page.waitForTimeout(450);
     await page.screenshot({ path: resolve(artifactsDir, '08-desktop-vs.png') });
-    await page.keyboard.press('KeyZ'); // Skip VS -> Fight
+    await page.keyboard.press('KeyZ', { delay: 75 }); // Skip VS -> Fight
     await page.waitForTimeout(1600); // Wait for ROUND 1 freeze to finish
     await page.keyboard.down('ArrowRight');
     await page.waitForTimeout(280);
     await page.keyboard.up('ArrowRight');
-    await page.keyboard.press('KeyA');
+    await page.keyboard.press('KeyA', { delay: 75 });
     await page.waitForTimeout(120);
 
     const fightPng = decodeCanvasPng(await canvasLoc.screenshot());

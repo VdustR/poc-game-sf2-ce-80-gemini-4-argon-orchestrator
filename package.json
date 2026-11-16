@@ -4,6 +4,11 @@
   "type": "module",
   "description": "STREET FIGHTER II': CHAMPION EDITION 80 — Neo Geo Pocket Color Chibi-styled SF2' CE Tribute for TIC-80 (WASM Web + Keyboard + Gamepad + Auto Touch Cockpit) (Built with Gemini 4 Argon Orchestrator)",
   "license": "MIT",
+  "homepage": "https://vdustr.github.io/poc-game-sf2-ce-80-gemini-4-argon-orchestrator/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VdustR/poc-game-sf2-ce-80-gemini-4-argon-orchestrator.git"
+  },
   "scripts": {
     "build": "node scripts/build.mjs",
     "test": "node verify_e2e.js && node scripts/smoke-test.mjs && node scripts/verify-player.mjs",
