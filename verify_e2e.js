@@ -49,7 +49,7 @@ for (let tr = 0; tr < 8; tr++) {
   }
 }
 const ticCode = chunks[5][0].data.toString('utf8');
-execFileSync('luajit', ['-e', `${ticCode}\nassert(type(TIC)=="function" and type(BOOT)=="function")`], { cwd: root, encoding: 'utf8' });
+execFileSync('luajit', ['-'], { input: `${ticCode}\nassert(type(TIC)=="function" and type(BOOT)=="function")\n`, cwd: root, encoding: 'utf8' });
 console.log(`[e2e] .tic binary verified: code=${chunks[5][0].size}B (<65535B, luajit syntax OK), palette=48B, chunks=${Object.keys(chunks).length}`);
 
 // 2. Execute LuaJIT headless simulation across all 12 fighters & authentic SF2 mechanics
@@ -343,6 +343,6 @@ end
 _orig_print("[lua-e2e] ALL 12 FIGHTERS, 36 SPECIALS, SF2 MECHANICS, BONUS, ATTRACT, BOUNDS PASSED (" .. #_prints .. " prints checked)")
 `;
 
-const out = execFileSync('luajit', ['-e', injectedHarness], { cwd: root, encoding: 'utf8' });
+const out = execFileSync('luajit', ['-'], { input: injectedHarness, cwd: root, encoding: 'utf8' });
 process.stdout.write(out);
 console.log('[e2e] Complete PASS.');
