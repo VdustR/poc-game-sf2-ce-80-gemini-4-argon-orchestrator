@@ -2,11 +2,13 @@
 
 **Neo Geo Pocket Color (*Match of the Millennium* SD/Chibi) Style Tribute to *Street Fighter II': Champion Edition* on the TIC-80 Fantasy Console (`240×136`)**
 
+> **Built with Gemini 4 Argon Orchestrator** — End-to-end game design, TIC-80 Lua engine, NGPC chibi pixel art synthesis, 8-track chiptune tracker transcription, WebAssembly arcade shell, and automated E2E verification orchestrated by **Gemini 4 Argon Orchestrator**.
+
 ---
 
 ## Overview
 
-`sf2-ce-80` (`v1.0.0`) is a fan tribute to Capcom's *Street Fighter II': Champion Edition* (1992) engineered for **TIC-80 v1.4.1** and packaged as an offline-ready Web PWA arcade shell. It combines CPS-1 fighting mechanics (hitstop, normal-to-special cancels, negative-edge inputs, 36 special moves, command normals, throws, stun/dizzy, mirror-match 2P palettes, and toggleable Hyper Fighting Turbo speed) with a 16-color Neo Geo Pocket Color chibi visual presentation.
+`poc-game-sf2-ce-80-gemini-4-argon-orchestrator` (`sf2-ce-80`, `v1.0.0`) is a fan tribute to Capcom's *Street Fighter II': Champion Edition* (1992) engineered with **Gemini 4 Argon Orchestrator** for **TIC-80 v1.4.1** and packaged as an offline-ready Web PWA arcade shell. It combines CPS-1 fighting mechanics (hitstop, normal-to-special cancels, negative-edge inputs, 36 special moves, command normals, throws, stun/dizzy, mirror-match 2P palettes, and toggleable Hyper Fighting Turbo speed) with a 16-color Neo Geo Pocket Color chibi visual presentation.
 
 ### Highlights
 - **Native TIC-80 v1.4.1 WebAssembly Execution**: Boots [sf2_ce_80.tic](sf2_ce_80.tic) inside the bundled `nesbox/TIC-80 v1.4.1` WASM runtime (`vendor/tic80/tic80.js` + `tic80lua.wasm`) with default `CRT: ON` scanlines and `INT: ON` integer scaling (`768×432` desktop / `512×288` mobile landscape for TIC-80's `256×144` overscan frame).
@@ -62,3 +64,9 @@ npm test
 # 3. Serve the built PWA locally (default port 4173)
 npm run serve
 ```
+
+---
+
+## AI Orchestration
+
+This entire project — including gameplay systems research, TIC-80 Lua engine architecture, hardware `8×8` NGPC chibi sprites/stages, 8-track chiptune soundtrack transcription, adaptive WebAssembly/PWA player shell, and automated test suites — was built with **Gemini 4 Argon Orchestrator**.

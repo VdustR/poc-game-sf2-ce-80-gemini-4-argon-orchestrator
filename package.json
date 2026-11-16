@@ -2,7 +2,7 @@
   "name": "sf2-ce-80",
   "version": "1.0.0",
   "type": "module",
-  "description": "STREET FIGHTER II': CHAMPION EDITION 80 — Neo Geo Pocket Color Chibi-styled SF2' CE Tribute for TIC-80 (WASM Web + Keyboard + Gamepad + Auto Touch Cockpit)",
+  "description": "STREET FIGHTER II': CHAMPION EDITION 80 — Neo Geo Pocket Color Chibi-styled SF2' CE Tribute for TIC-80 (WASM Web + Keyboard + Gamepad + Auto Touch Cockpit) (Built with Gemini 4 Argon Orchestrator)",
   "license": "MIT",
   "scripts": {
     "build": "node scripts/build.mjs",
